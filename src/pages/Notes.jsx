@@ -26,7 +26,7 @@ const Notes = () => {
   };
 
   const handleNoteSubmit = async () => {
-    if (newNote) {
+    if (newNote && selectedTag) {
       await client.set(`note:${Date.now()}`, { text: newNote, tag: selectedTag });
       setNewNote('');
       fetchNotes();
@@ -71,8 +71,15 @@ const Notes = () => {
         ))}
       </Box>
       <Box>
-        <Input placeholder="New note" value={newNote} onChange={(e) => setNewNote(e.target.value)} />
-        <Button onClick={handleNoteSubmit}>Add Note</Button>
+        <HStack>
+          <Input placeholder="New note" value={newNote} onChange={(e) => setNewNote(e.target.value)} />
+          <Select placeholder="Select tag" value={selectedTag} onChange={(e) => setSelectedTag(e.target.value)}>
+            {tags.map(tag => (
+              <option key={tag.key} value={tag.value.name}>{tag.value.name}</option>
+            ))}
+          </Select>
+          <Button onClick={handleNoteSubmit}>Add Note</Button>
+        </HStack>
       </Box>
       <Box>
         <Input placeholder="New tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} />
